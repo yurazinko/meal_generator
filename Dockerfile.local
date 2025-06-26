@@ -1,0 +1,24 @@
+FROM ruby:3.4.4-alpine
+
+ENV BUILD_PACKAGES="build-base yaml-dev" \
+    DEV_PACKAGES="tzdata postgresql-dev vim git gcompat"
+
+RUN apk update && \
+    apk upgrade && \
+    apk add --update\
+    $BUILD_PACKAGES \
+    $DEV_PACKAGES \
+    $RUBY_PACKAGES && \
+    rm -rf /var/cache/apk/*
+
+RUN gem update --system && gem install bundler:2.6.9
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY Gemfile* ./
+RUN bundle install
+
+COPY . ./
+
+CMD bundle exec rails db:migrate && bundle exec rails s -p 80 -b '0.0.0.0'

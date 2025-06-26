@@ -1,0 +1,35 @@
+version: "1.0"
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile.local
+  tmpfs:
+    - /tmp
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app:cached
+  environment:
+    MEAL_GENERATOR_DATABASE_USER: user
+    MEAL_GENERATOR_DATABASE_PASSWORD: password
+    MEAL_GENERATOR_DATABASE_HOST: postgres
+    MEAL_GENERATOR_DATABASE_PORT: "5432"
+
+services:
+  app:
+    <<: *app
+    command: bundle exec rails server -p 3000 -b 0.0.0.0 -P /tmp/rails.pid
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:17.5-alpine
+    ports:
+      - 5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST_AUTH_METHOD: trust
