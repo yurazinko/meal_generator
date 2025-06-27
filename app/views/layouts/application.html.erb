@@ -23,6 +23,18 @@
   </head>
 
   <body>
+    <% flash.each do |key, value| %>
+      <div class="flash <%= key %>"><%= value %></div>
+    <% end %>
+    <p>
+      <% if current_user %>
+        Logged in as <%= current_user.email %> |
+        <%= button_to "Logout", logout_path, method: :delete %>
+      <% else %>
+        <%= link_to "Login", login_path %> |
+        <%= link_to "Sign up", signup_path %>
+      <% end %>
+    </p>
     <%= yield %>
   </body>
 </html>

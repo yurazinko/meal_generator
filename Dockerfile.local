@@ -1,7 +1,7 @@
 FROM ruby:3.4.4-alpine
 
 ENV BUILD_PACKAGES="build-base yaml-dev" \
-    DEV_PACKAGES="tzdata postgresql-dev vim git gcompat"
+    DEV_PACKAGES="tzdata postgresql-dev vim git gcompat nodejs npm yarn"
 
 RUN apk update && \
     apk upgrade && \
