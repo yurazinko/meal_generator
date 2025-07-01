@@ -41,6 +41,8 @@ gem "thruster", require: false
 
 gem "bcrypt", "~> 3.1.7"
 
+gem "httparty"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -50,6 +52,8 @@ group :development, :test do
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
+
+  gem "pry-rails"
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
@@ -64,6 +68,8 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "factory_bot_rails"
   gem "capybara"
   gem "selenium-webdriver"
+  gem "shoulda-matchers", "~> 6.5"
 end

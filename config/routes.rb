@@ -20,4 +20,9 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
 
   delete "logout", to: "sessions#destroy"
+
+  get "mealdb/suggest", to: "mealdb#suggest"
+  post "mealdb/save/:id", to: "mealdb#save", as: :save_mealdb_meal
+
+  resources :meals, only: [ :index, :show ]
 end

@@ -1,0 +1,25 @@
+<% if @meal_data %>
+  <h2><%= @meal_data["strMeal"] %></h2>
+  <img src="<%= @meal_data["strMealThumb"] %>" width="300" alt="<%= @meal_data["strMeal"] %>">
+  <p><%= simple_format(@meal_data["strInstructions"]) %></p>
+
+  <%= button_to "Save in database", save_mealdb_meal_path(@meal_data["idMeal"]), method: :post, class: "btn btn-primary" %>
+<% elsif flash[:alert] %>
+  <p class="text-danger"><%= flash[:alert] %></p>
+<% end %>
+
+
+<h1>Please select ingredients</h1>
+
+<%= form_with url: mealdb_suggest_path, method: :get, local: true do %>
+  <div style="columns: 3; gap: 1rem;">
+    <% @available_ingredients.each do |ingredient| %>
+      <label>
+        <%= check_box_tag "ingredients[]", ingredient %>
+        <%= ingredient.titleize %>
+      </label><br>
+    <% end %>
+  </div>
+
+  <%= submit_tag "What's to cook?", class: "btn btn-success" %>
+<% end %>

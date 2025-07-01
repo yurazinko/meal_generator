@@ -1,0 +1,17 @@
+<h1><%= @meal.name %></h1>
+
+<% if @meal.image_url.present? %>
+  <img src="<%= @meal.image_url %>" alt="<%= @meal.name %>" width="300">
+<% end %>
+
+<h3>Ingridients:</h3>
+<ul>
+  <% @meal.ingredients.each do |ingredient| %>
+    <li><%= ingredient.name.titleize %></li>
+  <% end %>
+</ul>
+
+<h3>Instructions:</h3>
+<p><%= simple_format(@meal.instructions) %></p>
+
+<%= link_to "Back to list", meals_path, class: "btn btn-secondary" %>

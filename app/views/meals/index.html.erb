@@ -1,0 +1,29 @@
+<h1>Saved meals</h1>
+
+<%= link_to "Add new meal", mealdb_suggest_path, class: "btn btn-primary mb-4" %>
+
+<% if @meals.any? %>
+  <ul>
+    <% @meals.each do |meal| %>
+      <li>
+        <%= link_to meal.name, meal_path(meal) %>
+        <% if meal.image_url.present? %>
+          <br>
+          <img src="<%= meal.image_url %>" alt="<%= meal.name %>" width="150">
+          <br>
+          <% if meal.ingredients.any? %>
+            <strong>Ingredients:</strong>
+            <ul>
+              <% meal.ingredients.each do |ingredient| %>
+                <li><%= ingredient.name %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <br>
+<% else %>
+  <p>No meals yet.</p>
+<% end %>
