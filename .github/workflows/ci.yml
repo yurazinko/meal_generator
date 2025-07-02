@@ -88,6 +88,17 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install JS dependencies
+        run: yarn install
+
+      - name: Precompile Rails assets
+        run: RAILS_ENV=test bundle exec rails assets:precompile
+
       - name: Set up database and run tests
         env:
           MEAL_GENERATOR_DATABASE_HOST: localhost
