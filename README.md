@@ -1,24 +1,33 @@
-# README
+# Meal generator
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 1. Running this project on local machine
 
-Things you may want to cover:
+Build an image:
+```bash
+docker-compose build
+```
 
-* Ruby version
+Install all the gems:
+```bash
+docker-compose run app bundle install
+```
 
-* System dependencies
+Setup test and development databases:
 
-* Configuration
+```bash
+docker-compose run app bundle exec rails db:setup
+```
 
-* Database creation
+Start Rails application server:
 
-* Database initialization
+```bash
+docker-compose up
+```
 
-* How to run the test suite
+The application will be available here: `http://localhost:3000`
 
-* Services (job queues, cache servers, search engines, etc.)
+## 2. Testing
 
-* Deployment instructions
-
-* ...
+For testing we are using Rspec. For runing all tests:
+```bash
+docker-compose run app bundle exec rspec spec
