@@ -16,28 +16,15 @@ class MealdbController < ApplicationController
   end
 
   def save
-    service = MealdbSearchService.new([])
-    data = service.full_meal_data(params[:id])
-    return redirect_to mealdb_suggest_path, notice: "Meal not found" unless data
+    mealdb_data = MealdbSearchService.new.full_meal_data(params[:id])
 
-    existing = Meal.find_by(external_id: data["idMeal"])
+    return redirect_to mealdb_suggest_path, notice: "Meal not found" unless mealdb_data.present?
 
-    return redirect_to meal_path(existing), notice: "Meal already exists" if existing
+    existing_meal = Meal.find_by(external_id: mealdb_data["idMeal"])
 
-    meal = Meal.create!(
-      name: data["strMeal"],
-      instructions: data["strInstructions"],
-      image_url: data["strMealThumb"],
-      external_id: data["idMeal"]
-    )
+    return redirect_to meal_path(existing_meal), notice: "Meal already exists" if existing_meal.present?
 
-    (1..20).each do |i|
-      ing_name = data["strIngredient#{i}"]
-      next if ing_name.blank?
-
-      ingredient = Ingredient.find_or_create_by!(name: ing_name.strip)
-      MealIngredient.create!(meal:, ingredient:)
-    end
+    meal = Meal.create_with_ingredients(mealdb_data)
 
     redirect_to meal_path(meal), notice: "Meal saved"
   end
