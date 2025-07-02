@@ -37,12 +37,12 @@ jobs:
       - name: Install dependencies
         run: bundle install
 
-      - name: Run bundle-audit check
-        run: bundle exec bundle-audit check --update
+      - name: Install bundle-audit
+        run: gem install bundle-audit
 
       - name: Fail if vulnerabilities are found
         run: |
-          if bundle exec bundle-audit check --update | grep -q "Vulnerabilities found"; then
+          if bundle-audit check --update | grep -q "Vulnerabilities found"; then
             echo "Vulnerabilities found! Failing the job.";
             exit 1;
           fi
