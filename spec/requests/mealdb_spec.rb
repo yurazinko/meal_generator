@@ -15,7 +15,7 @@ RSpec.describe MealdbController, type: :request do
   end
 
   before do
-    allow_any_instance_of(MealdbController).to receive(:require_login).and_return(true)
+    sign_in_as(user)
   end
 
   describe "GET #suggest" do
@@ -95,11 +95,10 @@ end
         allow(MealdbSearchService).to receive(:new).and_return(service_double)
         allow(service_double).to receive(:full_meal_data).with("12345").and_return(valid_meal_data)
 
-        expect {
-          post save_mealdb_meal_path(id: "12345")
-        }.to change(Meal, :count).by(1)
-        .and change(Ingredient, :count).by(2)
-        .and change(MealIngredient, :count).by(2)
+        expect { post save_mealdb_meal_path(id: "12345") }
+          .to change(Meal, :count).by(1)
+          .and change(Ingredient, :count).by(2)
+          .and change(MealIngredient, :count).by(2)
 
         meal = Meal.last
         expect(response).to redirect_to(meal_path(meal))
