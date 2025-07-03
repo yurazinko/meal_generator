@@ -20,11 +20,11 @@ class MealdbController < ApplicationController
 
     return redirect_to mealdb_suggest_path, notice: "Meal not found" unless mealdb_data.present?
 
-    existing_meal = Meal.find_by(external_id: mealdb_data["idMeal"])
+    existing_meal = current_user.meals.find_by(external_id: mealdb_data["idMeal"])
 
     return redirect_to meal_path(existing_meal), notice: "Meal already exists" if existing_meal.present?
 
-    meal = Meal.create_with_ingredients(mealdb_data)
+    meal = Meal.create_with_ingredients(mealdb_data, current_user)
 
     redirect_to meal_path(meal), notice: "Meal saved"
   end

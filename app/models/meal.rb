@@ -1,14 +1,15 @@
 class Meal < ApplicationRecord
   MEALDB_API_INGREDIENTS_COUNT = 20
 
+  belongs_to :user
   has_many :meal_ingredients, dependent: :destroy
   has_many :ingredients, through: :meal_ingredients
 
   validates :name, presence: true
 
-  def self.create_with_ingredients(mealdb_data)
+  def self.create_with_ingredients(mealdb_data, user)
     ActiveRecord::Base.transaction do
-      meal = create!(
+      meal = user.meals.create!(
         name: mealdb_data["strMeal"],
         instructions: mealdb_data["strInstructions"],
         image_url: mealdb_data["strMealThumb"],
@@ -16,10 +17,10 @@ class Meal < ApplicationRecord
       )
 
       (1..MEALDB_API_INGREDIENTS_COUNT).each do |i|
-        ing_name = mealdb_data["strIngredient#{i}"]
-        next if ing_name.blank?
+        ingredient_name = mealdb_data["strIngredient#{i}"]
+        next if ingredient_name.blank?
 
-        ingredient = Ingredient.find_or_create_by!(name: ing_name.strip)
+        ingredient = Ingredient.find_or_create_by!(name: ingredient_name.strip)
         MealIngredient.create!(meal:, ingredient:)
       end
 

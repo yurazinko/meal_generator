@@ -55,6 +55,10 @@ RSpec.describe MealdbController, type: :request do
 end
 
   describe "POST #save" do
+    before do
+      sign_in_as(user)
+    end
+
     context "when meal data not found" do
       it "redirects to suggest with alert" do
         service_double = instance_double(MealdbSearchService)
@@ -71,7 +75,7 @@ end
 
     context "when meal already exists" do
       it "redirects to existing meal" do
-        existing_meal = create(:meal, external_id: "12345")
+        existing_meal = create(:meal, external_id: "12345", user: user)
 
         service_double = instance_double(MealdbSearchService)
         allow(MealdbSearchService).to receive(:new).and_return(service_double)
@@ -94,8 +98,8 @@ end
         expect {
           post save_mealdb_meal_path(id: "12345")
         }.to change(Meal, :count).by(1)
-          .and change(Ingredient, :count).by(2)
-          .and change(MealIngredient, :count).by(2)
+        .and change(Ingredient, :count).by(2)
+        .and change(MealIngredient, :count).by(2)
 
         meal = Meal.last
         expect(response).to redirect_to(meal_path(meal))

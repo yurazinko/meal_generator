@@ -2,10 +2,10 @@ class MealsController < ApplicationController
   before_action :require_login
 
   def index
-    @meals = Meal.includes(:ingredients).order(created_at: :desc)
+    @meals = current_user.meals.includes(:ingredients).order(created_at: :desc)
   end
 
   def show
-    @meal = Meal.includes(:ingredients).find(params[:id])
+    @meal = current_user.meals.includes(:ingredients).find(params[:id])
   end
 end

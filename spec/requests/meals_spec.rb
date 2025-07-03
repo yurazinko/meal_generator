@@ -20,7 +20,7 @@ RSpec.describe "MealsController", type: :request do
       end
 
       it "renders meals with ingredients" do
-        meal = create(:meal)
+        meal = create(:meal, user: user)
         ingredient = create(:ingredient)
         meal.ingredients << ingredient
 
@@ -32,7 +32,7 @@ RSpec.describe "MealsController", type: :request do
   end
 
   describe "GET /meals/:id" do
-    let(:meal) { create(:meal) }
+    let(:meal) { create(:meal, user: user) }
 
     context "when not logged in" do
       it "redirects to login page" do
